@@ -26,7 +26,7 @@ namespace RogueGame.Systems
                     x = Game.Player.X - 1;
                     break;
                 case Direction.Right:
-                    x = -Game.Player.X + 1;
+                    x = Game.Player.X + 1;
                     break;
                 default:
                     return false;

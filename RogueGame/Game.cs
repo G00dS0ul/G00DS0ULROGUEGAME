@@ -61,6 +61,8 @@ namespace RogueGame
                 _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, Swatch.DbWood);
                 _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
+            _rootConsole.Update += OnRootConsoleUpdate;  
+
             _rootConsole.Render += OnRootConsoleRender;
 
             _rootConsole.Run();
@@ -69,7 +71,7 @@ namespace RogueGame
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
             var didPlayerAct = false;
-            RLKeyPress keyPress = _rootConsole.Keyboard.GetKeyPress();
+            RLKeyPress keyPress = _rootConsole.Keyboard.GetKeyPress(); 
 
             if (keyPress != null)
             {
@@ -81,7 +83,7 @@ namespace RogueGame
                 {
                     didPlayerAct = CommandSystem.MovePlayer(Direction.Down);
                 }
-                else if (keyPress.Key == RLKey.AltLeft)
+                else if (keyPress.Key == RLKey.Left)
                 {
                     didPlayerAct = CommandSystem.MovePlayer(Direction.Left);
                 }
