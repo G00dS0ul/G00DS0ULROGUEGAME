@@ -22,7 +22,7 @@ namespace RogueGame.Core
         public void Draw(RLConsole console, IMap<MyCell> map)
         {
             var cell = map.GetCell(X, Y);
-            if (cell.IsExplored)
+            if (!cell.IsExplored)
             {
                 return;
             }

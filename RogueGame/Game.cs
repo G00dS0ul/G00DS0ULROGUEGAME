@@ -70,13 +70,15 @@ namespace RogueGame
 
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
+            _mapConsole.Clear();
+            DungeonMap?.Draw(_mapConsole);
+            Player?.Draw(_mapConsole, DungeonMap);
+
             RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
             RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, _inventoryHeight);
             RLConsole.Blit(_messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole, 0, _screenHeight - _messageHeight);
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
 
-            Player?.Draw(_mapConsole, DungeonMap);
-            DungeonMap?.Draw(_mapConsole);
             _rootConsole?.Draw();
         }
     }

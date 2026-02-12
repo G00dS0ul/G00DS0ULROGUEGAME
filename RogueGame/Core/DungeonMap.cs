@@ -14,8 +14,9 @@ namespace RogueGame.Core
     {
         private FieldOfView<MyCell> _fieldOfView;
 
-        public DungeonMap()
+        public override void Initialize(int width, int height)
         {
+            base.Initialize(width, height);
             _fieldOfView = new FieldOfView<MyCell>(this);
         }
 
