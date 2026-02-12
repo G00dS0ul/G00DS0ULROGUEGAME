@@ -1,9 +1,13 @@
 ﻿using RLNET;
 using RogueGame.Core;
+using RogueGame.Systems;
+
 namespace RogueGame
 {
     public class Game
     {
+        public static DungeonMap? DungeonMap { get; set; }
+
         private static readonly int _screenWidth = 100;
         private static readonly int _screenHeight = 70;
         private static RLRootConsole? _rootConsole;
@@ -30,7 +34,10 @@ namespace RogueGame
 
             var consoleTitle = "G00DS0ULRogueGame";
 
-                _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1f, consoleTitle);
+            var mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            DungeonMap = mapGenerator.CreateMap();
+
+            _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1f, consoleTitle);
                 _mapConsole = new RLConsole(_mapWidth, _mapHeight);
                 _messageConsole = new RLConsole(_messageWidth, _messageHeight);
                 _statConsole = new RLConsole(_statWidth, _statHeight);
@@ -65,6 +72,7 @@ namespace RogueGame
             RLConsole.Blit(_messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole, 0, _screenHeight - _messageHeight);
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
 
+            DungeonMap.Draw(_mapConsole);
             _rootConsole?.Draw();
         }
     }
