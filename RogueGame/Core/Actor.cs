@@ -29,7 +29,7 @@ namespace RogueGame.Core
 
             if (cell.IsInFov)
             {
-                console.Set(X, Y, Color, Colors.FloorBackground, Symbol);
+                console.Set(X, Y, Color, Colors.FloorBackgroundFov, Symbol);
             }
             else
             {

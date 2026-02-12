@@ -41,7 +41,7 @@ namespace RogueGame.Core
             {
                 if (cell.IsWalkable)
                 {
-                    console.Set(cell.X, cell.Y, Colors.FLoor, Colors.FloorBackground, '.');
+                    console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
                 }
                 else
                 {
@@ -77,6 +77,33 @@ namespace RogueGame.Core
                 cell.IsInFov = true;
                 cell.IsExplored = true;
             }
+        }
+
+        public bool SetActorPosition(Actor actor, int x, int y)
+        {
+            if (GetCell(x, y).IsWalkable)
+            {
+                SetIsWalkable(actor.X, actor.Y, true);
+                actor.X = x;
+                actor.Y = y;
+
+                SetIsWalkable(actor.X, actor.Y, false);
+                if (actor is Player)
+                {
+                    UpdatePlayerFieldOfView();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            var cell = GetCell(x, y);
+            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable);
+            cell.IsExplored = true;
         }
     }
 }
