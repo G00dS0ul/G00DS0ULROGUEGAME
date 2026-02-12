@@ -1,5 +1,5 @@
 ﻿using RLNET;
-
+using RogueGame.Core;
 namespace RogueGame
 {
     public class Game
@@ -45,19 +45,17 @@ namespace RogueGame
 
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
-            _mapConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Black);
-            _mapConsole.Print(1, 1, "Map", RLColor.White);
+            _mapConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Colors.FloorBackground);
+            _mapConsole.Print(1, 1, "Map", Colors.TextHeading);
 
-            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, RLColor.Gray);
-            _messageConsole.Print(1, 1, "Message", RLColor.White);
+            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Swatch.DbDeepWater);
+            _messageConsole.Print(1, 1, "Message", Colors.TextHeading);
             
-            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, RLColor.Brown);
-            _statConsole.Print(1, 1, "Stats", RLColor.White);
+            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, Swatch.DbOldStone);
+            _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
 
-            _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, RLColor.Cyan);
-            _inventoryConsole.Print(1, 1, "Inventory", RLColor.White);
-
-            _rootConsole?.Print(10, 10, "It Worked!", RLColor.White);
+            _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, Swatch.DbWood);
+            _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
         }
 
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
