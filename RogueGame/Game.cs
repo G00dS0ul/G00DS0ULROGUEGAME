@@ -6,6 +6,7 @@ namespace RogueGame
 {
     public class Game
     {
+        public static Player? Player { get; set; }
         public static DungeonMap? DungeonMap { get; set; }
 
         private static readonly int _screenWidth = 100;
@@ -13,18 +14,18 @@ namespace RogueGame
         private static RLRootConsole? _rootConsole;
 
         private static readonly int _mapWidth = 80;
-        private static readonly int _mapHeight = 50;
+        private static readonly int _mapHeight = 48;
         private static RLConsole _mapConsole;
 
-        private static readonly int _messageWidth = 80;
+        private static readonly int _messageWidth = 100;
         private static readonly int _messageHeight = 11;
         private static RLConsole _messageConsole;
 
         private static readonly int _statWidth = 20;
-        private static readonly int _statHeight = 70;
+        private static readonly int _statHeight = 48;
         private static RLConsole _statConsole;
 
-        private static readonly int _inventoryWidth = 80;
+        private static readonly int _inventoryWidth = 100;
         private static readonly int _inventoryHeight = 11;
         private static RLConsole _inventoryConsole;
 
@@ -34,10 +35,12 @@ namespace RogueGame
 
             var consoleTitle = "G00DS0ULRogueGame";
 
+            Player = new Player();
             var mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
             DungeonMap = mapGenerator.CreateMap();
+            DungeonMap.UpdatePlayerFieldOfView();
 
-            _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1f, consoleTitle);
+            _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1.5f, consoleTitle);
                 _mapConsole = new RLConsole(_mapWidth, _mapHeight);
                 _messageConsole = new RLConsole(_messageWidth, _messageHeight);
                 _statConsole = new RLConsole(_statWidth, _statHeight);
@@ -68,11 +71,12 @@ namespace RogueGame
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
             RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
-            RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, 0);
+            RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, _inventoryHeight);
             RLConsole.Blit(_messageConsole, 0, 0, _messageWidth, _messageHeight, _rootConsole, 0, _screenHeight - _messageHeight);
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight, _rootConsole, 0, 0);
 
-            DungeonMap.Draw(_mapConsole);
+            Player?.Draw(_mapConsole, DungeonMap);
+            DungeonMap?.Draw(_mapConsole);
             _rootConsole?.Draw();
         }
     }

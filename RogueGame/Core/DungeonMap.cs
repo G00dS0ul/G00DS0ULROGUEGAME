@@ -12,6 +12,13 @@ namespace RogueGame.Core
 {
     public class DungeonMap : Map<MyCell>
     {
+        private FieldOfView<MyCell> _fieldOfView;
+
+        public DungeonMap()
+        {
+            _fieldOfView = new FieldOfView<MyCell>(this);
+        }
+
         public void Draw(RLConsole mapConsole)
         {
             mapConsole.Clear();
@@ -50,6 +57,24 @@ namespace RogueGame.Core
                 {
                     console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
                 }
+            }
+        }
+
+        public void UpdatePlayerFieldOfView()
+        {
+            var player = Game.Player;
+
+            foreach (var cell in GetAllCells())
+            {
+                cell.IsInFov = false;
+            }
+
+            var cellsInFov = _fieldOfView.ComputeFov(player.X, player.Y, player.Awareness, true);
+
+            foreach (var cell in cellsInFov)
+            {
+                cell.IsInFov = true;
+                cell.IsExplored = true;
             }
         }
     }
