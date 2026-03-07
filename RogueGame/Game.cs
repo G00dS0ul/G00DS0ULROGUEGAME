@@ -1,6 +1,7 @@
 ﻿using RLNET;
 using RogueGame.Core;
 using RogueGame.Systems;
+using RogueSharp.Random;
 
 namespace RogueGame
 {
@@ -8,8 +9,10 @@ namespace RogueGame
     {
         public static Player? Player { get; set; }
         public static DungeonMap? DungeonMap { get; set; }
+        public static MessageLog? MessageLog { get; private set; }
         private static bool _renderRequired = true;
         public static CommandSystem? CommandSystem { get; private set; }
+        public static IRandom Random { get; private set; }
 
         private static readonly int _screenWidth = 100;
         private static readonly int _screenHeight = 70;
@@ -33,15 +36,21 @@ namespace RogueGame
 
         public static void Main()
         {
+            var seed = (int)DateTime.UtcNow.Ticks;
+            Random = new DotNetRandom(seed);
+
             var fontFileName = "terminal8x8.png";
 
-            var consoleTitle = "G00DS0ULRogueGame";
+            var consoleTitle = $"G00dS0ulRogueGame - Level 1 - Seed {seed}";
 
-            Player = new Player();
-            var mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            var mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 7, 13);
             DungeonMap = mapGenerator.CreateMap();
             DungeonMap.UpdatePlayerFieldOfView();
             CommandSystem = new CommandSystem();
+
+            MessageLog = new MessageLog();
+            MessageLog.Add("The Rogue arrives on level 1");
+            MessageLog.Add($"Level created with seed '{seed}'");
 
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight, 8, 8, 1.5f, consoleTitle);
                 _mapConsole = new RLConsole(_mapWidth, _mapHeight);
@@ -51,12 +60,6 @@ namespace RogueGame
 
                 _mapConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Colors.FloorBackground);
                 _mapConsole.Print(1, 1, "Map", Colors.TextHeading);
-
-                _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Swatch.DbDeepWater);
-                _messageConsole.Print(1, 1, "Message", Colors.TextHeading);
-
-                _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, Swatch.DbOldStone);
-                _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
 
                 _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, Swatch.DbWood);
                 _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
@@ -106,8 +109,10 @@ namespace RogueGame
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
             _mapConsole.Clear();
+            MessageLog.Draw(_messageConsole);
             DungeonMap?.Draw(_mapConsole);
             Player?.Draw(_mapConsole, DungeonMap);
+            Player.DrawStats(_statConsole);
 
             RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
             RLConsole.Blit(_statConsole, 0, 0, _statWidth, _statHeight, _rootConsole, _mapWidth, _inventoryHeight);

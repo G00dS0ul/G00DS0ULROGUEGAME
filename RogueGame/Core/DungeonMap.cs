@@ -7,6 +7,7 @@ using RLNET;
 using RogueSharp;
 using RogueGame.Core;
 using RogueGame.CustomRogueSharp;
+using Rectangle = RogueSharp.Rectangle;
 
 namespace RogueGame.Core
 {
@@ -14,6 +15,12 @@ namespace RogueGame.Core
     {
         private FieldOfView<MyCell> _fieldOfView;
 
+        public List<Rectangle> Rooms;
+
+        public DungeonMap()
+        {
+            Rooms = [];
+        }
         public override void Initialize(int width, int height)
         {
             base.Initialize(width, height);
@@ -28,6 +35,13 @@ namespace RogueGame.Core
             {
                 SetConsoleSymbolForCell(mapConsole, cell);
             }
+        }
+
+        public void AddPlayer(Player player)
+        {
+            Game.Player = player;
+            SetIsWalkable(player.X, player.Y, false);
+            UpdatePlayerFieldOfView();
         }
 
         private void SetConsoleSymbolForCell(RLConsole console, MyCell cell)
